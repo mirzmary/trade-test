@@ -1,0 +1,14 @@
+include  'service',
+        'persistence',
+         'api',
+        ':api:facade',
+        ':api:rest',
+        ':api:model',
+        ':api:api-client',
+        ':externalclients:currencyholidays',
+        ':crosscutting'
+
+
+
+
+

@@ -1,0 +1,37 @@
+persistence:
+   pool:
+      maxsize: 10
+   database:
+      username: sa
+      password:
+      url: jdbc:hsqldb:mem:trade;shutdown=true
+      driverclassname: org.hsqldb.jdbc.JDBCDriver
+   jpa:
+      persistenceunitname: trade-jpa-persistence-unit
+   hibernate:
+      outputsqlstatements: true
+      generateddl: true
+      databasedialect: org.hibernate.dialect.HSQLDialect
+      formatsql: true
+      hbmddlconversion: create
+      generatestatistics: true
+      globally_quoted_identifiers: false
+      hbm2ddl:
+        auto: create
+      jdbc:
+         fetchsize: 20
+         batchsize: 20
+   utility:
+      commit:
+         runner:
+            threads:
+               max: 25
+
+jersey:
+  client:
+    timeout:
+      connect: 2000
+      read: 1000
+
+validation:
+  currentdate: 2016-10-09
