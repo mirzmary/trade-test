@@ -1,7 +1,7 @@
 package com.trade.service.helper;
 
 
-import com.trade.persistence.currency.entity.Currency;
+import com.trade.crosscutting.currencyholiday.CurrencyHolidayResponseModel;
 import com.trade.service.trade.dto.BaseTradeDto;
 import com.trade.service.trade.dto.OptionTradeDto;
 import com.trade.service.trade.enums.*;
@@ -17,15 +17,6 @@ public class CommonTestHelper {
     private static final String CURRENCY = "USD";
     private static final String CURRENCY_PAIR = "USDEUR";
 
-
-
-    public Currency createCurrency() {
-        final Currency currency = new Currency();
-        currency.setCode(CURRENCY);
-        currency.setName("US Dollar");
-        currency.setNumber(840);
-        return currency;
-    }
 
     public BaseTradeDto createBaseTradeDto() {
         final BaseTradeDto baseTradeDto = new BaseTradeDto();
@@ -71,5 +62,12 @@ public class CommonTestHelper {
 
         return optionTradeDto;
 
+    }
+
+    public CurrencyHolidayResponseModel createCurrencyHolidayResponseModel() {
+        final CurrencyHolidayResponseModel model = new CurrencyHolidayResponseModel();
+        model.setDate(CURRENT_DATE_STRING.minusDays(10));
+        model.setCountryCode("US");
+        return model;
     }
 }

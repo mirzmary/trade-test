@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -68,18 +67,4 @@ public class ApiRestApplication {
         bean.setOrder(0);
         return bean;
     }
-
-    //region Configuration factory methods
-    @Bean
-    public FilterRegistrationBean registerOpenEntityManagerInViewFilter() {
-        // Define encoding filter
-        final FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(new OpenEntityManagerInViewFilter());
-        filterRegistrationBean.getInitParameters().put("entityManagerFactory", "entityManagerFactory");
-        filterRegistrationBean.getUrlPatterns().add("/*");
-        filterRegistrationBean.setName("filter.entitymanager");
-        filterRegistrationBean.setOrder(1);
-        return filterRegistrationBean;
-    }
-    //endregion
 }

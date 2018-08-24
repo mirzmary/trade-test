@@ -1,6 +1,0 @@
-CREATE TABLE CURRENCY (
-  ID bigint PRIMARY KEY NOT NULL IDENTITY,
-  CODE varchar(255),
-  NAME varchar(255),
-  NUMBER integer
-);

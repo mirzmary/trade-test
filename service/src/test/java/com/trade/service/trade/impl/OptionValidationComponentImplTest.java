@@ -1,12 +1,12 @@
 package com.trade.service.trade.impl;
 
-import com.trade.service.common.AbstractServiceImplTest;
 import com.trade.crosscutting.common.ValidationResult;
 import com.trade.crosscutting.common.enums.ErrorEnum;
-import com.trade.service.currency.CurrencyService;
+import com.trade.service.common.AbstractServiceImplTest;
+import com.trade.service.currencyholiday.CurrencyHolidayService;
 import com.trade.service.helper.CommonTestHelper;
-import com.trade.service.trade.dto.OptionTradeDto;
 import com.trade.service.trade.OptionTradeValidationService;
+import com.trade.service.trade.dto.OptionTradeDto;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Assert;
@@ -14,8 +14,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Optional;
+import java.util.ArrayList;
 
+import static org.easymock.EasyMock.anyInt;
+import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.expect;
 
 public class OptionValidationComponentImplTest extends AbstractServiceImplTest {
@@ -24,7 +26,7 @@ public class OptionValidationComponentImplTest extends AbstractServiceImplTest {
     private OptionTradeValidationService optionTradeValidationService = new OptionTradeValidationServiceImpl();
 
     @Mock
-    private CurrencyService currencyService;
+    private CurrencyHolidayService currencyHolidayService;
 
     @Before
     public void beforeTestStart() {
@@ -74,9 +76,7 @@ public class OptionValidationComponentImplTest extends AbstractServiceImplTest {
         // Reset
         resetAll();
         // Expectations
-
-        expect(currencyService.getByCode("USD")).andReturn(Optional.of(getHelper().createCurrency()));
-        expect(currencyService.getByCode("EUR")).andReturn(Optional.of(getHelper().createCurrency()));
+        expect(currencyHolidayService.getCurrencyHolidays(anyString(), anyInt())).andReturn(new ArrayList<>()).times(2);
         // Replay
         replayAll();
 
@@ -98,9 +98,7 @@ public class OptionValidationComponentImplTest extends AbstractServiceImplTest {
         // Reset
         resetAll();
         // Expectations
-
-        expect(currencyService.getByCode("USD")).andReturn(Optional.of(getHelper().createCurrency()));
-        expect(currencyService.getByCode("EUR")).andReturn(Optional.of(getHelper().createCurrency()));
+        expect(currencyHolidayService.getCurrencyHolidays(anyString(), anyInt())).andReturn(new ArrayList<>()).times(2);
         // Replay
         replayAll();
 
@@ -122,9 +120,7 @@ public class OptionValidationComponentImplTest extends AbstractServiceImplTest {
         // Reset
         resetAll();
         // Expectations
-
-        expect(currencyService.getByCode("USD")).andReturn(Optional.of(getHelper().createCurrency()));
-        expect(currencyService.getByCode("EUR")).andReturn(Optional.of(getHelper().createCurrency()));
+        expect(currencyHolidayService.getCurrencyHolidays(anyString(), anyInt())).andReturn(new ArrayList<>()).times(2);
         // Replay
         replayAll();
 
@@ -145,9 +141,7 @@ public class OptionValidationComponentImplTest extends AbstractServiceImplTest {
         // Reset
         resetAll();
         // Expectations
-
-        expect(currencyService.getByCode("USD")).andReturn(Optional.of(getHelper().createCurrency()));
-        expect(currencyService.getByCode("EUR")).andReturn(Optional.of(getHelper().createCurrency()));
+        expect(currencyHolidayService.getCurrencyHolidays(anyString(), anyInt())).andReturn(new ArrayList<>()).times(2);
         // Replay
         replayAll();
 

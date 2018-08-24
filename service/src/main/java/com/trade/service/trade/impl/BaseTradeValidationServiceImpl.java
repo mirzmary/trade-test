@@ -39,10 +39,14 @@ public class BaseTradeValidationServiceImpl extends CommonValidationComponentImp
     @Override
     public ValidationResult validateTrade(final BaseTradeDto baseTradeDto) {
         final ValidationResult validationResult = new ValidationResult();
-        if (!validateDateAfter(baseTradeDto.getTradeDate(), LocalDate.parse(currentDate))) {
-            LOGGER.info("Trade Date - {} can not be after Current date - {}", baseTradeDto.getTradeDate(), currentDate);
-            validationResult.put(ErrorEnum.INVALID_TRADE_DATE, String.format("Trade Date - %s can not be after Current date - %s", baseTradeDto.getTradeDate(), currentDate));
-        }
+        validateEnums(baseTradeDto, validationResult);
+        validateAmounts(baseTradeDto, validationResult);
+        validateDates(baseTradeDto, validationResult);
+        validateCurrencies(baseTradeDto, validationResult);
+        return validationResult;
+    }
+
+    private void validateEnums(final BaseTradeDto baseTradeDto, final ValidationResult validationResult) {
         if (!Counterparty.contains(baseTradeDto.getCustomer())) {
             LOGGER.info("Invalid Counterparty - {}", baseTradeDto.getCustomer());
             validationResult.put(ErrorEnum.INVALID_COUNTERPARTY, String.format("Invalid Counterparty - %s ", baseTradeDto.getCustomer()));
@@ -59,6 +63,9 @@ public class BaseTradeValidationServiceImpl extends CommonValidationComponentImp
             LOGGER.info("Invalid LegalEntity - {}", baseTradeDto.getLegalEntity());
             validationResult.put(ErrorEnum.INVALID_LEGAL_ENTITY, String.format("Invalid LegalEntity - %s ", baseTradeDto.getLegalEntity()));
         }
+    }
+
+    private void validateAmounts(final BaseTradeDto baseTradeDto, final ValidationResult validationResult) {
         if (!validateAmount(baseTradeDto.getAmount1())) {
             LOGGER.info("Invalid Amount1 - {}", baseTradeDto.getAmount1());
             validationResult.put(ErrorEnum.INVALID_AMOUNT1, String.format("Invalid Amount1 - %s ", baseTradeDto.getAmount1()));
@@ -71,14 +78,24 @@ public class BaseTradeValidationServiceImpl extends CommonValidationComponentImp
             LOGGER.info("Invalid Rate - {}", baseTradeDto.getRate());
             validationResult.put(ErrorEnum.INVALID_RATE, String.format("Invalid Rate - %s ", baseTradeDto.getRate()));
         }
+    }
+
+    private void validateDates(final BaseTradeDto baseTradeDto, final ValidationResult validationResult) {
+        if (!validateDateAfter(baseTradeDto.getTradeDate(), LocalDate.parse(currentDate))) {
+            LOGGER.info("Trade Date - {} can not be after Current date - {}", baseTradeDto.getTradeDate(), currentDate);
+            validationResult.put(ErrorEnum.INVALID_TRADE_DATE, String.format("Trade Date - %s can not be after Current date - %s", baseTradeDto.getTradeDate(), currentDate));
+        }
         if (!validateDateAfter(baseTradeDto.getTradeDate(), baseTradeDto.getValueDate())) {
             LOGGER.info("Value Date - {} should be after Trade Date - {}", baseTradeDto.getValueDate(), baseTradeDto.getTradeDate());
             validationResult.put(ErrorEnum.INVALID_VALUE_DATE, String.format("Value Date - %s should be after Trade Date - %s", baseTradeDto.getValueDate(), baseTradeDto.getTradeDate()));
         }
-        if (!validateWeekday(baseTradeDto.getValueDate())) {
+        else if (!validateWeekday(baseTradeDto.getValueDate())) {
             LOGGER.info("Value Date - {} should not be weekend day.", baseTradeDto.getValueDate());
             validationResult.put(ErrorEnum.INVALID_VALUE_DATE_WEEKEND, String.format("Value Date - %s should not be weekend day.", baseTradeDto.getValueDate()));
         }
+    }
+
+    private void validateCurrencies(final BaseTradeDto baseTradeDto, final ValidationResult validationResult) {
         if (!validateString(baseTradeDto.getCcyPair())) {
             LOGGER.info("Invalid Currency Pair - {}", baseTradeDto.getCcyPair());
             validationResult.put(ErrorEnum.INVALID_CURRENCY_PAIR, String.format("Invalid Currency Pair - %s ", baseTradeDto.getCcyPair()));
@@ -93,12 +110,11 @@ public class BaseTradeValidationServiceImpl extends CommonValidationComponentImp
                     final String countryCode = validCurrencies.stream().filter(currency -> currency.getCurrency().equals(c)).findFirst().get().getLocaleList().get(0).getCountry();
                     final List<CurrencyHolidayResponseModel> currencyHolidays = currencyHolidayService.getCurrencyHolidays(countryCode, baseTradeDto.getValueDate().getYear());
                     if (currencyHolidays.stream().anyMatch(currencyHoliday -> currencyHoliday.getDate().equals(baseTradeDto.getValueDate()))) {
-                        LOGGER.info("Invalid Currency - {}", c);
-                        validationResult.put(ErrorEnum.INVALID_CURRENCY, String.format("Invalid Currency - %s ", c));
+                        LOGGER.info("This Value date - {} is invalid for Currency - {} ", baseTradeDto.getValueDate(), c);
+                        validationResult.put(ErrorEnum.INVALID_CURRENCY_VALUE_DATE, String.format("This Value date - %s is invalid for Currency - %s", baseTradeDto.getValueDate(), c));
                     }
                 }
             });
         }
-        return validationResult;
     }
 }
