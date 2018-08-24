@@ -1,7 +1,7 @@
 package com.trade.api.rest.resources.trade;
 
 import com.trade.api.model.common.ResponseListModel;
-import com.trade.api.model.trade.TradeValidationRequestModelList;
+import com.trade.api.model.trade.TradeValidationRequestModel;
 import com.trade.api.model.trade.TradeValidationResponseModel;
 import com.trade.facade.trade.TradeFacade;
 import io.swagger.annotations.Api;
@@ -16,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/trade")
 @Component
@@ -38,7 +39,8 @@ public class TradeResource {
 
     @POST
     @Path("/validate")
-    public Response validateTradeList(final TradeValidationRequestModelList tradeValidationRequestModelList, @Context final HttpServletRequest requestContext) {
+    @ApiOperation(value = "API Say Hello", notes = "Validating trade data", response = Response.class)
+    public Response validateTradeList(final List<TradeValidationRequestModel> tradeValidationRequestModelList, @Context final HttpServletRequest requestContext) {
         LOGGER.debug("Processing trade list validation request - {}", tradeValidationRequestModelList);
         final ResponseListModel<TradeValidationResponseModel> response = tradeFacade.validateTradeList(tradeValidationRequestModelList);
         LOGGER.debug("Trade list validation processed successfully for trade list - {}, with response - {}", tradeValidationRequestModelList, response);

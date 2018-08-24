@@ -2,7 +2,6 @@ package com.trade.facade.trade.impl;
 
 import com.trade.api.model.common.ResponseListModel;
 import com.trade.api.model.trade.TradeValidationRequestModel;
-import com.trade.api.model.trade.TradeValidationRequestModelList;
 import com.trade.api.model.trade.TradeValidationResponseModel;
 import com.trade.facade.trade.TradeFacade;
 import com.trade.service.trade.BaseTradeValidationService;
@@ -41,13 +40,12 @@ public class TradeFacadeImpl implements TradeFacade {
     private MapperFacade mapperFacade;
 
     @Override
-    public ResponseListModel<TradeValidationResponseModel> validateTradeList(final TradeValidationRequestModelList tradeValidationRequestModelList) {
-        Assert.notNull(tradeValidationRequestModelList, "tradeValidationRequestModelList can not be null when validating trade list");
-        Assert.notNull(tradeValidationRequestModelList.getTradeValidationRequestModelList(), "tradeValidationRequestModelList models can not be null when validating trade list");
-        Assert.isTrue(!tradeValidationRequestModelList.getTradeValidationRequestModelList().isEmpty(), "tradeValidationRequestModelList models can not be empty when validating trade list");
+    public ResponseListModel<TradeValidationResponseModel> validateTradeList(final List<TradeValidationRequestModel> tradeValidationRequestModelList) {
+        Assert.notNull(tradeValidationRequestModelList, "tradeValidationRequestModelList models can not be null when validating trade list");
+        Assert.isTrue(!tradeValidationRequestModelList.isEmpty(), "tradeValidationRequestModelList models can not be empty when validating trade list");
         final List<TradeValidationResponseModel> validationList = Collections.synchronizedList(new ArrayList<>());
         final AtomicLong i = new AtomicLong(0L);
-        for (TradeValidationRequestModel model : tradeValidationRequestModelList.getTradeValidationRequestModelList()) {
+        for (TradeValidationRequestModel model : tradeValidationRequestModelList) {
             if (model.getType().equals(Type.VanillaOption.name())) {
                 final OptionTradeDto optionTradeDto = mapperFacade.map(model, OptionTradeDto.class);
                 optionTradeDto.setValueDate(model.getStyle().equals(Style.AMERICAN.name()) ? model.getExerciseStartDate() : model.getExpiryDate());

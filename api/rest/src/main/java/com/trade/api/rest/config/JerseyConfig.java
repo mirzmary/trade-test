@@ -1,7 +1,5 @@
 package com.trade.api.rest.config;
 
-import com.trade.api.rest.config.provider.DateParamConverterProvider;
-import com.trade.api.rest.resources.test.TestResource;
 import com.trade.api.rest.resources.trade.TradeResource;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import org.glassfish.jersey.logging.LoggingFeature;
@@ -15,10 +13,7 @@ public class JerseyConfig extends ResourceConfig {
 
     public JerseyConfig() {
         register(MultiPartFeature.class);
-        register(TestResource.class);
         register(TradeResource.class);
-
-        register(DateParamConverterProvider.class);
 
 
         property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
@@ -30,6 +25,5 @@ public class JerseyConfig extends ResourceConfig {
         register(MultiPartFeature.class);
         register(ApiListingResource.class);
         register(JacksonObjectMapper.class);
-        register(LocalDateParamConverterProvider.class);
     }
 }

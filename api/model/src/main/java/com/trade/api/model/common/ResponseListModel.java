@@ -1,6 +1,7 @@
 package com.trade.api.model.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.trade.crosscutting.common.enums.ErrorEnum;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
